@@ -8,6 +8,6 @@ public class Student extends User {
         this.studyYear = studyYear;
     }
 
-    public String getUniID()
+    public String getUniID() {return uniID;}
     
 }
