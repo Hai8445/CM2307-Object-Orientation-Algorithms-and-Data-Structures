@@ -9,6 +9,10 @@ public abstract class User {
         this.email = email;
     }
 
+    public String getEmail() { return email;}
+    public String getName() { return name; }
+    public String getID() {return id;}
+
 }
 
 

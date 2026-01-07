@@ -1,4 +1,4 @@
-public class Homeowner {
+public class Homeowner extends User {
     private int noOfProperties;
     private boolean superHost;
 
