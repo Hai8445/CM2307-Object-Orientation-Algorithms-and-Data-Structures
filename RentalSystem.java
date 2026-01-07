@@ -25,6 +25,16 @@ public class RentalSystem {
     public void bookRoom(String email, String propertyID) {
         User user = users.get(email);
 
+        if (user == null) {
+            System.out.println("User email doesn't exist");
+            return;
+        }
+
+        if (!(user instanceof Student)) {
+        System.out.println("Only students can book properties");
+        return;
+    }
+
         for (Property p : properties) {
             if (p.getPropertyID().equals(propertyID)) {
                 if (p.getStatus() != PropertyStatus.AVAILABLE) {
