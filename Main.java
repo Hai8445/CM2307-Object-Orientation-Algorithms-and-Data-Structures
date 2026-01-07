@@ -9,12 +9,10 @@ public class Main {
         system.addUser(s1);
         system.addUser(h1);
         system.addProperty(p1);
-        
-        System.out.println("Searching for rooms under £600...");
-        system.filterByBudget(600.00).forEach(System.out::println);
 
-        System.out.println("\nAttempting to book P101...");
-        system.bookRoom("alex@cardiff.ac.uk", "P1");
+        MainMenu menu = new MainMenu(system);
+        menu.start();
+        
 
     }
 }

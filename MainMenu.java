@@ -46,7 +46,7 @@ public class MainMenu {
         if (results.isEmpty()){
             System.out.println("Sorry, no rooms found within that budget");
         } else {
-            System.out.println("\nRooms found:0");
+            System.out.println("\nRooms found:");
             results.forEach(System.out::println);
         }
     } catch(NumberFormatException exception) {
@@ -59,7 +59,13 @@ public class MainMenu {
     String email = scanner.nextLine();
     System.out.print("Enter Property ID: ");
     String propertyID = scanner.nextLine();
-    
+
+    try {
+        system.bookRoom(email, propertyID);
+    } catch (Exception e) {
+        System.out.println("Booking failed rip: " + e.getMessage());
+    }
+
    }
 
 }

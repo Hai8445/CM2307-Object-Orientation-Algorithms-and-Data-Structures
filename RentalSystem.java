@@ -22,7 +22,7 @@ public class RentalSystem {
         return availableInBudget;
     }
 
-    public synchronised void bookRoom(String email, String propertyID) {
+    public synchronized void bookRoom(String email, String propertyID) {
         User user = users.get(email);
 
         if (user == null) {
