@@ -35,7 +35,7 @@ public class RentalSystem {
         }
 
         if (!(user instanceof Student)) {
-        System.out.println("Only students can book properties");
+            System.out.println("Only students can book properties");
         return;
     }
 
@@ -44,7 +44,7 @@ public class RentalSystem {
                 if (p.getStatus() != PropertyStatus.AVAILABLE) {
                     throw new IllegalStateException("Room is already pending or taken");
                 }
-                p.setStatus(PropertyStatus.RENTED);
+                p.setStatus(PropertyStatus.PENDING);
                 System.out.println("Booking for " + user.getName() + " successful");
                 return;
             }
@@ -60,6 +60,14 @@ public class RentalSystem {
             }
         }
         return ownerProperties;
+    }
+
+    public void createProperty(String address, double rent, String ownerEmail) {
+        String newPropertyID = "P" + (properties.size() + 1);
+        Property newProp = PropertyFactory.createProperty(newPropertyID, address, rent, ownerEmail);
+
+        addProperty(newProp);
+        System.out.println("Property successfully listed with ID " + newPropertyID);
     }
 
     public synchronized boolean removePropertyListing(String propertyID, String ownerEmail) {

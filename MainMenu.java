@@ -42,31 +42,46 @@ public class MainMenu {
 
         if (currentUser instanceof Student) {
             System.out.println("2. Book a room");
+            System.out.println("3. Logout");
+
         } else if (currentUser instanceof Homeowner) {
             System.out.println("2. View my listings");
-            System.out.println("3. Delete a listing");
+            System.out.println("3. Add property listing");
+            System.out.println("4. Delete property listing");
+            System.out.println("5. Logout");
+
         }
-        System.out.println("3. Logout");
         System.out.println("Select an option");
 
         String selected = scanner.nextLine();
-        switch(selected) {
-            case "1":
-                handleSearch();
-                break;
-            case "2":
-                if (currentUser instanceof Student) handleBooking();
-                else if (currentUser instanceof Homeowner) handleListing();
-                break;
-            case "3":
-                if (currentUser instanceof Student) on = false;
-                else if (currentUser instanceof Homeowner) handlePropertyDeletion();
-                break;
-            case "4":
-                if (currentUser instanceof Homeowner) on = false;
-            default:
-                System.out.println("Invalid option");
+        if (currentUser instanceof Student) {
+            switch(selected) {
+                case "1":
+                    handleSearch();
+                case "2":
+                    handleListing();
+                case "3":
+                    handleBooking();
+                case "4":
+                    ;
+                case "5":
+                    on = false;
 
+            }
+        } else if (currentUser instanceof Homeowner) {
+            switch(selected) {
+                case "1":
+                    handleSearch();
+                case "2":
+                    handleListing();
+                case "3":
+                    handlePropertyCreation();
+                case "4":
+                    handlePropertyDeletion();
+                case "5":
+                    on = false;
+
+            }
         }
 
     }
@@ -108,6 +123,20 @@ public class MainMenu {
         System.out.println("You currently have no listings");
     } else {
         myListings.forEach(System.out::println);
+    }
+   }
+
+   private void handlePropertyCreation() {
+    System.out.println("\n--- Insert Property Details Below ---");
+    System.out.print("Enter Address: ");
+    String address = scanner.nextLine();
+
+    System.out.print("Enter Monthly Rent: £");
+    try {
+        double rent = Double.parseDouble(scanner.nextLine());
+        system.createProperty(address, rent, currentUser.getEmail());
+    } catch (NumberFormatException e ) {
+        System.out.println("Please enter a valid number");
     }
    }
 
