@@ -117,11 +117,9 @@ public class RentalSystem {
     }
 
     public void createProperty(String address, double rent, String ownerEmail) {
-        String newPropertyID = "P" + (properties.size() + 1);
-        Property newProp = PropertyFactory.createProperty(newPropertyID, address, rent, ownerEmail);
-
+        Property newProp = PropertyFactory.createProperty(address, rent, ownerEmail);
         addProperty(newProp);
-        System.out.println("Property successfully listed with ID " + newPropertyID);
+        System.out.println("Property successfully listed with ID " + newProp.getPropertyID());
     }
 
     public synchronized boolean removePropertyListing(String propertyID, String ownerEmail) {

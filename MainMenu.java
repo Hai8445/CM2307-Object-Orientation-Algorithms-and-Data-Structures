@@ -83,7 +83,7 @@ public class MainMenu {
         } else {
             System.out.print("How many properties do you own? ");
             int props = Integer.parseInt(scanner.nextLine());
-            newUser = new Homeowner(id, name, password, email, props, false);
+            newUser = new Homeowner(id, name, email, password, props, false);
         }
         
         system.registerUser(newUser);
@@ -119,12 +119,9 @@ public class MainMenu {
                     handleSearch();
                     break;
                 case "2":
-                    handleListing();
-                    break;
-                case "3":
                     handleBooking();
                     break;
-                case "4":
+                case "3":
                     on = false;
                     break;
                 default:
@@ -179,15 +176,14 @@ public class MainMenu {
    }
 
    private void handleBooking() {
-    System.out.print("Enter Student Email: ");
-    String email = scanner.nextLine();
+    System.out.println("Booking as: " + currentUser.getEmail());
     System.out.print("Enter Property ID: ");
     String propertyID = scanner.nextLine();
 
     try {
-        system.bookRoom(email, propertyID);
+        system.bookRoom(currentUser.getEmail(), propertyID);
     } catch (Exception e) {
-        System.out.println("Booking failed rip: " + e.getMessage());
+        System.out.println("Booking failed: " + e.getMessage());
     }
 
    }
@@ -204,18 +200,29 @@ public class MainMenu {
    private void viewPendingBookings() {
     List<Booking> pending = system.getPendingBookings(currentUser.getEmail());
     if (pending.isEmpty()) {
-        System.out.println("No pending requests");
+        System.out.println("No pending requests.");
         return;
     }
+    
     System.out.println("\n--- Current Pending Bookings ---");
     pending.forEach(System.out::println);
 
-    System.out.println("\n> Enter the booking ID of the booking you would like to accept (or press enter to skip):");
+    System.out.println("\nEnter the booking ID of the booking you would like to accept/deny (or press enter to skip): ");
     String bookingID = scanner.nextLine();
+    
     if (!bookingID.isEmpty()) {
-        system.approveBooking(bookingID, currentUser.getEmail());
+        System.out.println("Do you want to: 1. Approve  2. Deny");
+        String choice = scanner.nextLine();
+        
+        if (choice.equals("1")) {
+            system.approveBooking(bookingID, currentUser.getEmail());
+        } else if (choice.equals("2")) {
+            system.denyBooking(bookingID, currentUser.getEmail());
+        } else {
+            System.out.println("Invalid selection.");
+        }
     }
-   }
+}
 
    private void handlePropertyCreation() {
     System.out.println("\n--- Insert Property Details Below ---");
