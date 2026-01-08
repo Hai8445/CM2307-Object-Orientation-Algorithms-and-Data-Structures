@@ -12,6 +12,10 @@ public class RentalSystem {
         properties.add(property);
     }
 
+    public User getUserDetails(String email) {
+        return users.get(email);
+    }
+
     public List<Property> filterByBudget(double maxBudget) {
         List<Property> availableInBudget = new ArrayList<>();
         for (Property p : properties) {
@@ -46,5 +50,13 @@ public class RentalSystem {
             }
         }
         System.out.println("Error: Property ID not found");
+    }
+
+    public List<Property> getOwnerProperties(String ownerEmail) {
+        List<Property> ownerProperties = new ArrayList<>();
+        for (Property p : properties) {
+            ownerProperties.add(p);
+        }
+        return ownerProperties;
     }
 }

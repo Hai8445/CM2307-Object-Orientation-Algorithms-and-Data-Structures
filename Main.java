@@ -3,7 +3,7 @@ public class Main {
         RentalSystem system = new RentalSystem();
 
         Student s1 = new Student("S1", "Craig Saxon", "craigsaxon@cardiff.ac.uk", "C24021993", 1);
-        Homeowner h1 = new Homeowner("H1", "Sarah Connor", "sarahjones@gmail.com", 3, true);
+        Homeowner h1 = new Homeowner("H1", "Sarah Connor", "sarahconnor@gmail.com", 3, true);
         Property p1 = new Property("P1", "64 Wick Street", 950.00);
 
         system.addUser(s1);
