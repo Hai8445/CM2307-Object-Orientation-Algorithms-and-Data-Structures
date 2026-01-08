@@ -55,8 +55,27 @@ public class RentalSystem {
     public List<Property> getOwnerProperties(String ownerEmail) {
         List<Property> ownerProperties = new ArrayList<>();
         for (Property p : properties) {
-            ownerProperties.add(p);
+            if (p.getOwnerEmail().equals(ownerEmail)){
+                ownerProperties.add(p);
+            }
         }
         return ownerProperties;
+    }
+
+    public synchronized boolean removePropertyListing(String propertyID, String ownerEmail) {
+        for (int i = 0; i < properties.size(); i++) {
+            Property p = properties.get(i);
+            if (p.getPropertyID().equals(propertyID)) {
+                if (p.getOwnerEmail().equals(ownerEmail)) {
+                    properties.remove(i);
+                    return true; //Deletion successful
+                } else {
+                    System.out.println("You do not have permission to delete this property!");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Invalid Property ID");
+        return false;
     }
 }

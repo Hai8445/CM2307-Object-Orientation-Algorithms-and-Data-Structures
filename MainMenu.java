@@ -44,6 +44,7 @@ public class MainMenu {
             System.out.println("2. Book a room");
         } else if (currentUser instanceof Homeowner) {
             System.out.println("2. View my listings");
+            System.out.println("3. Delete a listing");
         }
         System.out.println("3. Logout");
         System.out.println("Select an option");
@@ -54,15 +55,15 @@ public class MainMenu {
                 handleSearch();
                 break;
             case "2":
-                if (currentUser instanceof Student) {
-                    handleBooking();
-                } else if (currentUser instanceof Homeowner) {
-                    handleListing();
-                }
+                if (currentUser instanceof Student) handleBooking();
+                else if (currentUser instanceof Homeowner) handleListing();
                 break;
             case "3":
-                on = false;
+                if (currentUser instanceof Student) on = false;
+                else if (currentUser instanceof Homeowner) handlePropertyDeletion();
                 break;
+            case "4":
+                if (currentUser instanceof Homeowner) on = false;
             default:
                 System.out.println("Invalid option");
 
@@ -108,6 +109,17 @@ public class MainMenu {
     } else {
         myListings.forEach(System.out::println);
     }
+   }
+
+   private void handlePropertyDeletion() {
+    System.out.print("Enter the ID of the property you wish to delete: ");
+    String propertyID = scanner.nextLine();
+
+    boolean success = system.removePropertyListing(propertyID, currentUser.getEmail());
+    if (success) {
+        System.out.println("Successfully removed property listing");
+    }
+
    }
 
 }
