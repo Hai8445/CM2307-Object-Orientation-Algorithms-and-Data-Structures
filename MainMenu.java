@@ -12,27 +12,85 @@ public class MainMenu {
    }
 
    public void start() {
-    if (login()) {
-        showMainMenu();
+    boolean exit = false;
+    while (!exit) {
+        System.out.println("\n--- Welcome to StudentRentals ---");
+        System.out.println("1. Login");
+        System.out.println("2. Register");
+        System.out.println("3. Exit");
+        System.out.print("Select an option: ");
+        
+        String choice = scanner.nextLine();
+        switch (choice) {
+            case "1":
+                if (login()) showMainMenu();
+                break;
+            case "2":
+                handleRegistration();
+                break;
+            case "3":
+                exit = true;
+                break;
+            default:
+                System.out.println("Invalid selection.");
+        }
     }
    }
 
    private boolean login() {
     System.out.println("--- StudentRentals Login ---");
+
     System.out.print("Enter your Email: ");
     String email = scanner.nextLine();
 
+    System.out.print("Enter Password: ");
+    String pass = scanner.nextLine();
+
     User user = system.getUserDetails(email);
 
-    if (user != null) {
+    if (user != null && user.checkPassword(pass)) {
         this.currentUser = user;
         System.out.println(user.getName() + " has successfully logged in with the email " + user.getEmail());
         return true;
     } else {
-        System.out.println("User not found");
+        System.out.println("Invalid email or password");
         return false;
     }
    }
+
+   private void handleRegistration() {
+    System.out.println("\n--- Register New Account ---");
+    System.out.println("Are you a: 1. Student  2. Homeowner");
+    String type = scanner.nextLine();
+
+    System.out.print("Enter Name: ");
+    String name = scanner.nextLine();
+    System.out.print("Enter Email: ");
+    String email = scanner.nextLine();
+    System.out.print("Create Password: ");
+    String password = scanner.nextLine();
+    
+    try {
+        User newUser;
+        String id = "U" + (System.currentTimeMillis() % 1000); 
+        
+        if (type.equals("1")) {
+            System.out.print("Enter University ID: ");
+            String uniID = scanner.nextLine();
+            System.out.print("Enter Year of Study: ");
+            int year = Integer.parseInt(scanner.nextLine());
+            newUser = new Student(id, name, email, password, uniID, year);
+        } else {
+            System.out.print("How many properties do you own? ");
+            int props = Integer.parseInt(scanner.nextLine());
+            newUser = new Homeowner(id, name, password, email, props, false);
+        }
+        
+        system.registerUser(newUser);
+    } catch (Exception e) {
+        System.out.println("Registration Failed: " + e.getMessage());
+    }
+    }
 
    private void showMainMenu() {
     boolean on = true;

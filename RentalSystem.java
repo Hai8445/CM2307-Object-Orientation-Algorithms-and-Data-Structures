@@ -29,6 +29,14 @@ public class RentalSystem {
         return availableInBudget;
     }
 
+    public void registerUser(User user) throws Exception {
+        if (users.containsKey(user.getEmail())) {
+            throw new Exception("User with this email already exists");
+        }
+        addUser(user);
+        System.out.println("Registration successful for: " + user.getName());
+    }
+
     public synchronized void bookRoom(String email, String propertyID) {
         User user = users.get(email);
         if (user == null) {

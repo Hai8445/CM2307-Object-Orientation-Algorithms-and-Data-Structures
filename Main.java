@@ -2,8 +2,8 @@ public class Main {
     public static void main(String[] args){
         RentalSystem system = new RentalSystem();
 
-        Student s1 = new Student("S1", "Craig Saxon", "craigsaxon@cardiff.ac.uk", "C24021993", 1);
-        Homeowner h1 = new Homeowner("H1", "Sarah Connor", "sarahconnor@gmail.com", 3, true);
+        Student s1 = new Student("S1", "Craig Saxon", "craigsaxon@cardiff.ac.uk", "123", "C24021993", 1);
+        Homeowner h1 = new Homeowner("H1", "Sarah Connor", "sarahconnor@gmail.com", "123", 3, true);
         Property p1 = new Property("P1", "64 Wick Street", 950.00, "sarahconnor@gmail.com");
 
         system.addUser(s1);
