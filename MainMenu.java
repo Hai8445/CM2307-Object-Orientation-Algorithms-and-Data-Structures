@@ -46,9 +46,10 @@ public class MainMenu {
 
         } else if (currentUser instanceof Homeowner) {
             System.out.println("2. View my listings");
-            System.out.println("3. Add property listing");
-            System.out.println("4. Delete property listing");
-            System.out.println("5. Logout");
+            System.out.println("3. View/Approve Pending Bookings");
+            System.out.println("4. Add property listing");
+            System.out.println("5. Delete property listing");
+            System.out.println("6. Logout");
 
         }
         System.out.println("Select an option");
@@ -58,28 +59,44 @@ public class MainMenu {
             switch(selected) {
                 case "1":
                     handleSearch();
+                    break;
                 case "2":
                     handleListing();
+                    break;
                 case "3":
                     handleBooking();
+                    break;
                 case "4":
-                    ;
-                case "5":
                     on = false;
+                    break;
+                default:
+                    System.out.println("Invalid command");
+                    break;
 
             }
         } else if (currentUser instanceof Homeowner) {
             switch(selected) {
                 case "1":
                     handleSearch();
+                    break;
                 case "2":
                     handleListing();
+                    break;
                 case "3":
-                    handlePropertyCreation();
+                    viewPendingBookings();
+                    break;
                 case "4":
-                    handlePropertyDeletion();
+                    handlePropertyCreation();
+                    break;
                 case "5":
+                    handlePropertyDeletion();
+                    break;
+                case "6":
                     on = false;
+                    break;
+                default:
+                    System.out.println("Invalid command");
+                    break;
 
             }
         }
@@ -118,11 +135,27 @@ public class MainMenu {
    }
    private void handleListing() {
     System.out.println("\n--- Your Properties ---");
-    List<Property> myListings = system.getOwnerProperties(currentUser.getName());
+    List<Property> myListings = system.getOwnerProperties(currentUser.getEmail());
     if (myListings.isEmpty()) {
         System.out.println("You currently have no listings");
     } else {
         myListings.forEach(System.out::println);
+    }
+   }
+
+   private void viewPendingBookings() {
+    List<Booking> pending = system.getPendingBookings(currentUser.getEmail());
+    if (pending.isEmpty()) {
+        System.out.println("No pending requests");
+        return;
+    }
+    System.out.println("\n--- Current Pending Bookings ---");
+    pending.forEach(System.out::println);
+
+    System.out.println("\n> Enter the booking ID of the booking you would like to accept (or press enter to skip):");
+    String bookingID = scanner.nextLine();
+    if (!bookingID.isEmpty()) {
+        system.approveBooking(bookingID, currentUser.getEmail());
     }
    }
 

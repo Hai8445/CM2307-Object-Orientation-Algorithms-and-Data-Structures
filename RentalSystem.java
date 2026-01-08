@@ -3,6 +3,9 @@ import java.util.*;
 public class RentalSystem {
     private Map<String, User> users = new HashMap<>();
     private List<Property> properties = new ArrayList<>();
+    private List<Booking> bookings = new ArrayList<>();
+
+    private static int newBookingID = 1;
 
     public void addUser(User user) {
         users.put(user.getEmail(), user);
@@ -28,16 +31,14 @@ public class RentalSystem {
 
     public synchronized void bookRoom(String email, String propertyID) {
         User user = users.get(email);
-
         if (user == null) {
             System.out.println("User email doesn't exist");
             return;
         }
-
         if (!(user instanceof Student)) {
             System.out.println("Only students can book properties");
         return;
-    }
+        }
 
         for (Property p : properties) {
             if (p.getPropertyID().equals(propertyID)) {
@@ -45,7 +46,9 @@ public class RentalSystem {
                     throw new IllegalStateException("Room is already pending or taken");
                 }
                 p.setStatus(PropertyStatus.PENDING);
-                System.out.println("Booking for " + user.getName() + " successful");
+                String bookingID = "B" + newBookingID++;
+                bookings.add(new Booking(bookingID, email, propertyID));
+                System.out.println("Booking request sent! The owner will be in contact with you shortly");
                 return;
             }
         }
@@ -60,6 +63,49 @@ public class RentalSystem {
             }
         }
         return ownerProperties;
+    }
+
+    public List<Booking> getPendingBookings(String ownerEmail) {
+        List<Booking> pending = new ArrayList<>();
+        for (Booking b : bookings) {
+            Property p = getPropertyByID(b.getPropertyID());
+            if (p != null && p.getOwnerEmail().equals(ownerEmail)){
+                pending.add(b);
+            }
+        }
+        return pending;
+    }
+
+    public synchronized void approveBooking(String bookingID, String ownerEmail) {
+        for (Booking b : bookings) {
+            if (b.getBookingId().equals(bookingID)) {
+                Property p = getPropertyByID(b.getPropertyID());
+                if (p != null && p.getOwnerEmail().equals(ownerEmail)) {
+                    b.setApproved(true);
+                    p.setStatus(PropertyStatus.RENTED);
+                    System.out.println("Booking " + bookingID + " approved!");
+                    return;
+                } else if (!p.getOwnerEmail().equals(ownerEmail)) {
+                    System.out.println("You are not the owner of this property!");
+                    return;
+                }
+            }
+        }   
+        System.out.println("Booking ID unresolved");
+    }
+
+    public synchronized void denyBooking(String bookingID, String ownerEmail) {
+        for (Booking b : bookings) {
+            if (b.getBookingId().equals(bookingID)){
+                Property p = getPropertyByID(b.getPropertyID());
+                if (p != null && p.getOwnerEmail().equals(ownerEmail)) {
+                    bookings.remove(b);
+                    p.setStatus(PropertyStatus.AVAILABLE);
+                    System.out.println("Booking " + bookingID + " denied");
+                    return;
+                }
+            }
+        }
     }
 
     public void createProperty(String address, double rent, String ownerEmail) {
@@ -85,5 +131,14 @@ public class RentalSystem {
         }
         System.out.println("Invalid Property ID");
         return false;
+    }
+
+    private Property getPropertyByID(String ID) {
+        for (Property p : properties) {
+            if (p.getPropertyID().equals(ID)) {
+                return p;
+            }
+        }
+        return null;
     }
 }
